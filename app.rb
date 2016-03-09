@@ -11,12 +11,6 @@ class Post < ActiveRecord::Base
   validates :body, presence: true
 end
 
-get "/" do
-  @posts = Post.order("created_at DESC")
-  @title = "Welcome."
-  erb :"posts/index"
-end
-
 helpers do
   def title
     if @title
@@ -25,6 +19,12 @@ helpers do
       "Welcome."
     end
   end
+end
+
+get "/" do
+  @posts = Post.order("created_at DESC")
+  @title = "Welcome."
+  erb :"posts/index"
 end
 
 get "/posts/create" do
@@ -46,4 +46,16 @@ get "/posts/:id" do
   @post = Post.find(params[:id])
   @title = @post.title
   erb :"posts/view"
+end
+
+get "/posts/:id/edit" do
+  @post = Post.find(params[:id])
+  @title = "Edit Form"
+  erb :"posts/edit"
+end
+
+put "/posts/:id" do
+  @post = Post.find(params[:id])
+  @post.update(params[:post])
+  redirect "/posts/#{@post.id}"
 end
