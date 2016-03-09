@@ -12,6 +12,9 @@ class Post < ActiveRecord::Base
 end
 
 helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+
   def title
     if @title
       "#{@title}"
